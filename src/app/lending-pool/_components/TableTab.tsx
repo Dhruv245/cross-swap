@@ -37,7 +37,7 @@ const TableTab = () => {
     )
 
     return (
-        <div className="container mx-auto space-y-8 p-4">
+        <section className="container mx-auto space-y-8 p-4">
             <Card className="w-full">
                 <CardHeader>
                     <CardTitle>Lending Pool</CardTitle>
@@ -64,7 +64,7 @@ const TableTab = () => {
                     </Tabs>
                 </CardContent>
             </Card>
-        </div>
+        </section>
     )
 }
 

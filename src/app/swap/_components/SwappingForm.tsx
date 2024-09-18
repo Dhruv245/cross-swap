@@ -28,7 +28,7 @@ export default function TokenSwapForm() {
   }
 
   return (
-    <Card className="mx-auto w-full max-w-md">
+    <Card className="mx-4 w-full max-w-md sm:mx-auto">
       <CardHeader>
         <CardTitle>Swap Tokens</CardTitle>
         <CardDescription>Exchange your EVM-based tokens</CardDescription>
