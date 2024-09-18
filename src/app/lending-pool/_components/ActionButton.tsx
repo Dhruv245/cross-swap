@@ -6,7 +6,7 @@ import useLendingPopup from "@/hooks/useLendingPopup"
 import { useCallback } from "react"
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-const ActionButton = ({ action, token }: { action: "Lend" | "Borrow", token: any }) => {
+const ActionButton = ({ action }: { action: "Lend" | "Borrow", token: any }) => {
     const { onOpen: onBorrowingPopupOpen } = useBorrowingPopup();
     const { onOpen: onLendingPopupOpen } = useLendingPopup();
 
