@@ -4,6 +4,10 @@ import '@rainbow-me/rainbowkit/styles.css';
 import "./globals.css";
 import Header from "./_components/Header";
 import BlockChainProvider from "@/blockchain/BlockChainProvider";
+import dynamic from "next/dynamic";
+const Sidebar = dynamic(() => import("./_components/Sidebar"));
+const BorrowingPopup = dynamic(() => import("@/components/popup/BorrowingPopup"));
+const LendingPopup = dynamic(() => import("@/components/popup/LendingPopup"));
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -34,6 +38,9 @@ export default function RootLayout({
         <BlockChainProvider>
           <Header />
           {children}
+          <Sidebar />
+          <BorrowingPopup />
+          <LendingPopup />
         </BlockChainProvider>
       </body>
     </html>

@@ -2,14 +2,14 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
-import { Button } from "@/components/ui/button"
 import { useState } from "react"
 import { tokens } from "@/lib/constants";
+import ActionButton from "./ActionButton";
 
 const TableTab = () => {
     const [activeTab, setActiveTab] = useState('lend')
 
-    const renderTokenTable = (action: string) => (
+    const renderTokenTable = (action: "Lend"|"Borrow") => (
         <Table>
             <TableHeader>
                 <TableRow>
@@ -26,9 +26,7 @@ const TableTab = () => {
                         <TableCell>{token.apy.toFixed(2)}%</TableCell>
                         <TableCell>${(token.available * token.price).toLocaleString()}</TableCell>
                         <TableCell>
-                            <Button variant="outline" onClick={() => console.log(`${action} ${token.symbol}`)}>
-                                {action}
-                            </Button>
+                            <ActionButton action={action} token={token} />
                         </TableCell>
                     </TableRow>
                 ))}
