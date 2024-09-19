@@ -1,22 +1,23 @@
 "use client"
-
 import { Button } from "@/components/ui/button"
 import useBorrowingPopup from "@/hooks/useBorrowingPopup"
 import useLendingPopup from "@/hooks/useLendingPopup"
+import { Token } from "@/lib/types"
 import { useCallback } from "react"
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-const ActionButton = ({ action }: { action: "Lend" | "Borrow", token: any }) => {
+
+const ActionButton = ({ action , token}: { action: "Lend" | "Borrow", token: Token }) => {
     const { onOpen: onBorrowingPopupOpen } = useBorrowingPopup();
     const { onOpen: onLendingPopupOpen } = useLendingPopup();
 
     const handleClick = useCallback(() => {
         if (action === "Lend") {
-            onLendingPopupOpen()
+            onLendingPopupOpen(token)
         } else {
-            onBorrowingPopupOpen()
+            onBorrowingPopupOpen(token)
         }
-    }, [action, onLendingPopupOpen, onBorrowingPopupOpen])
+    }, [action, onLendingPopupOpen, onBorrowingPopupOpen, token])
+
     return (
         <Button variant="outline" onClick={handleClick}>
             {action}

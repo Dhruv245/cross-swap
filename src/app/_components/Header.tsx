@@ -1,6 +1,7 @@
 import Link from "next/link"
 import { ConnectButton } from "@rainbow-me/rainbowkit"
 import MenuButton from "./MenuButton"
+import ThemeButton from "@/components/ThemeButton"
 
 const Header = () => {
   return (
@@ -10,7 +11,8 @@ const Header = () => {
         <nav className="hidden items-center gap-2 sm:flex">
             <Link href="/swap">Swap</Link>
             <Link href="/lending-pool">Lending Pool</Link>
-            <ConnectButton />
+            <ConnectButton  />
+            <ThemeButton />
         </nav>
         <MenuButton />
       </div>

@@ -1,4 +1,4 @@
-"use client"
+"use client";
 import {
     RainbowKitProvider,
 } from '@rainbow-me/rainbowkit';
@@ -16,7 +16,7 @@ const BlockChainProvider = ({ children }: PropsWithChildren) => {
     return (
         <WagmiProvider config={config} >
             <QueryClientProvider client={queryClient}>
-                <RainbowKitProvider>
+                <RainbowKitProvider >
                     {children}
                 </RainbowKitProvider>
             </QueryClientProvider>

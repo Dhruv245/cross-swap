@@ -1,38 +1,11 @@
 "use client";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import { useState } from "react"
-import { tokens } from "@/lib/constants";
-import ActionButton from "./ActionButton";
+import TokenTable from "./TokenTable";
 
 const TableTab = () => {
     const [activeTab, setActiveTab] = useState('lend')
-
-    const renderTokenTable = (action: "Lend"|"Borrow") => (
-        <Table>
-            <TableHeader>
-                <TableRow>
-                    <TableHead>Token</TableHead>
-                    <TableHead>APY (%)</TableHead>
-                    <TableHead>Available</TableHead>
-                    <TableHead>Action</TableHead>
-                </TableRow>
-            </TableHeader>
-            <TableBody>
-                {tokens.map((token) => (
-                    <TableRow key={token.symbol}>
-                        <TableCell>{token.symbol}</TableCell>
-                        <TableCell>{token.apy.toFixed(2)}%</TableCell>
-                        <TableCell>${(token.available * token.price).toLocaleString()}</TableCell>
-                        <TableCell>
-                            <ActionButton action={action} token={token} />
-                        </TableCell>
-                    </TableRow>
-                ))}
-            </TableBody>
-        </Table>
-    )
 
     return (
         <section className="container mx-auto space-y-8 p-4">
@@ -50,13 +23,13 @@ const TableTab = () => {
                         <TabsContent value="lend">
                             <div className="space-y-4">
                                 <h3 className="text-lg font-semibold">Available to Lend</h3>
-                                {renderTokenTable('Lend')}
+                                <TokenTable action="Lend" />
                             </div>
                         </TabsContent>
                         <TabsContent value="borrow">
                             <div className="space-y-4">
                                 <h3 className="text-lg font-semibold">Available to Borrow</h3>
-                                {renderTokenTable('Borrow')}
+                                <TokenTable action="Borrow" />
                             </div>
                         </TabsContent>
                     </Tabs>

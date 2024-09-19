@@ -5,6 +5,7 @@ import "./globals.css";
 import Header from "./_components/Header";
 import BlockChainProvider from "@/blockchain/BlockChainProvider";
 import dynamic from "next/dynamic";
+import ThemeProvider from "@/providers/ThemeProvider";
 const Sidebar = dynamic(() => import("./_components/Sidebar"));
 const BorrowingPopup = dynamic(() => import("@/components/popup/BorrowingPopup"));
 const LendingPopup = dynamic(() => import("@/components/popup/LendingPopup"));
@@ -35,13 +36,15 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <BlockChainProvider>
-          <Header />
-          {children}
-          <Sidebar />
-          <BorrowingPopup />
-          <LendingPopup />
-        </BlockChainProvider>
+        <ThemeProvider defaultTheme="light" attribute="class" enableSystem disableTransitionOnChange>
+          <BlockChainProvider>
+            <Header />
+            {children}
+            <Sidebar />
+            <BorrowingPopup />
+            <LendingPopup />
+          </BlockChainProvider>
+        </ThemeProvider>
       </body>
     </html>
   );

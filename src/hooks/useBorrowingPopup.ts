@@ -1,17 +1,19 @@
+import { Token } from "@/lib/types";
 import { create } from "zustand"
 
 interface BorrowingPopupStore {
     isOpen: boolean;
-    onOpen: () => void;
+    token?: Token;
+    onOpen: (token: Token) => void;
     onClose: () => void;
 }
 
 const useBorrowingPopup = create<BorrowingPopupStore>((set) => ({
     isOpen: false,
-    onOpen() {
-        set({ isOpen: true})
+    onOpen(token) {
+        set({ isOpen: true, token })
     },
-    onClose: () => set({ isOpen: false }),
+    onClose: () => set({ isOpen: false, token: undefined }),
 }))
 
 export default useBorrowingPopup
