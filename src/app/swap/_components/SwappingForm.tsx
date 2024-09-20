@@ -1,11 +1,12 @@
 'use client'
-import { useState } from 'react'
+import { useCallback, useState } from 'react'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Button } from "@/components/ui/button"
-import { ArrowDownIcon, ArrowRightIcon } from 'lucide-react'
+import { ArrowRightIcon, ArrowUpDown } from 'lucide-react'
 import { tokens } from '@/lib/constants'
+import Tooltip from '@/components/Tooltip'
 
 export default function TokenSwapForm() {
   const [fromToken, setFromToken] = useState(tokens[0].symbol)
@@ -13,19 +14,23 @@ export default function TokenSwapForm() {
   const [amount, setAmount] = useState('')
   const [estimatedOutput, setEstimatedOutput] = useState('')
 
-  const handleSwap = () => {
+  const handleSwap = useCallback(() => {
     // In a real application, this would call a smart contract or API
     console.log(`Swapping ${amount} ${fromToken} to ${toToken}`)
-    // Mock estimation - in reality, this would be calculated based on real exchange rates
-    setEstimatedOutput((parseFloat(amount) * 0.98).toFixed(6))
-  }
+  }, [fromToken, toToken, amount])
 
-  const handleReverse = ()=> {
+  const handleUserInput = useCallback((value: string) => {
+    setAmount(value)
+    // Mocking the api request to get the estimated output
+    setEstimatedOutput(value ? (parseFloat(value) * 0.98).toFixed(6) : '')
+  }, [])
+
+  const handleReverse = useCallback(() => {
     setFromToken(toToken)
     setToToken(fromToken)
     setAmount(estimatedOutput)
     setEstimatedOutput(amount)
-  }
+  }, [fromToken, toToken, amount, estimatedOutput])
 
   return (
     <Card className="mx-4 w-full max-w-md sm:mx-auto">
@@ -43,8 +48,9 @@ export default function TokenSwapForm() {
                 type="number"
                 placeholder="0.0"
                 value={amount}
-                onChange={(e) => setAmount(e.target.value)}
+                onChange={(e) => handleUserInput(e.target.value)}
                 className="flex-grow"
+                step="any"
               />
               <Select value={fromToken} onValueChange={setFromToken}>
                 <SelectTrigger className="w-[120px]">
@@ -61,10 +67,12 @@ export default function TokenSwapForm() {
             </div>
           </div>
 
-          <div className="flex justify-center" >
-            <Button size="icon" type='button' variant="ghost" onClick={handleReverse}>
-            <ArrowDownIcon className="h-6 w-6" />
-            </Button>
+          <div className="flex justify-center">
+            <Tooltip content="Switch Token">
+              <Button size="icon" type='button' variant="ghost" onClick={handleReverse}>
+                <ArrowUpDown className="h-6 w-6" />
+              </Button>
+            </Tooltip>
           </div>
 
           <div className="space-y-2">
@@ -77,6 +85,7 @@ export default function TokenSwapForm() {
                 value={estimatedOutput}
                 readOnly
                 className="flex-grow"
+                step="any"
               />
               <Select value={toToken} onValueChange={setToToken}>
                 <SelectTrigger className="w-[120px]">

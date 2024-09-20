@@ -24,7 +24,7 @@ const BorrowingPopup = () => {
         <DialogDescription>
           <form className="my-5" action={handleSubmit}>
             <div>
-              <Input placeholder={`Enter ${token?.symbol} amount`} name="amount" type="number" className="invalid:focus:ring-destructive" min={1} required />
+              <Input placeholder={`Enter ${token?.symbol} amount`} name="amount" type="number" className="invalid:focus:ring-destructive" min={0} step="any" required />
             </div>
             <Button className="my-3 w-full">Borrow</Button>
           </form>
