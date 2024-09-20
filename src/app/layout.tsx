@@ -6,7 +6,7 @@ import Header from "./_components/Header";
 import BlockChainProvider from "@/blockchain/BlockChainProvider";
 import dynamic from "next/dynamic";
 import ThemeProvider from "@/providers/ThemeProvider";
-const Sidebar = dynamic(() => import("./_components/Sidebar"));
+import Sidebar from "./_components/Sidebar";
 const BorrowingPopup = dynamic(() => import("@/components/popup/BorrowingPopup"));
 const LendingPopup = dynamic(() => import("@/components/popup/LendingPopup"));
 

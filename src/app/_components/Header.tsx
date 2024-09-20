@@ -12,7 +12,7 @@ const Header = () => {
             <Link href="/swap">Swap</Link>
             <Link href="/lending-pool">Lending Pool</Link>
             <ConnectButton  />
-            <ThemeButton />
+            <ThemeButton  />
         </nav>
         <MenuButton />
       </div>

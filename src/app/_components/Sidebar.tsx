@@ -12,14 +12,14 @@ const Sidebar = () => {
     onClose()
   }
   return (
-    <aside className={cn('absolute  bottom-0 z-10 top-0 h-full transition-all duration-500 w-72 border bg-primary-foreground', isOpen ? 'right-0' : "-right-72")}>
+    <aside className={cn('fixed bottom-0 z-10 top-0 h-full transition-all duration-500 w-72 border bg-background', isOpen ? 'right-0' : "-right-72")}>
       <Button type="button" size="icon" onClick={onClose} variant="ghost" className="absolute right-4 top-4">
         <X />
       </Button>
-      <nav className="mt-6 flex flex-col items-start gap-2 p-4">
+      <nav className="mt-14 flex flex-col items-start gap-2 p-4">
         <Link onClick={hanldeLink} href="/swap">Swap</Link>
         <Link onClick={hanldeLink} href="/lending-pool">Lending Pool</Link>
-        <ThemeButton />
+        <ThemeButton className="absolute left-4 top-4" />
       </nav>
     </aside>
   )
