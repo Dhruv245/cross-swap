@@ -1,36 +1,76 @@
 'use client'
-import { useCallback, useState } from 'react'
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { Input } from "@/components/ui/input"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { Button } from "@/components/ui/button"
-import { ArrowRightIcon, ArrowUpDown } from 'lucide-react'
-import { tokens } from '@/lib/constants'
-import Tooltip from '@/components/Tooltip'
+import { useCallback, useState } from 'react';
+import { ethers } from 'ethers';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Button } from "@/components/ui/button";
+import { ArrowRightIcon, ArrowUpDown } from 'lucide-react';
+import { tokens } from '@/lib/constants';
+import Tooltip from '@/components/Tooltip';
+import contractabi from "../abi.json";
+
+const contractAddress = '0x6482220f77fC720b93846fA85D5fe3B58E0aC27a';
 
 export default function TokenSwapForm() {
-  const [fromToken, setFromToken] = useState(tokens[0].symbol)
-  const [toToken, setToToken] = useState(tokens[1].symbol)
-  const [amount, setAmount] = useState('')
-  const [estimatedOutput, setEstimatedOutput] = useState('')
+  const [fromToken, setFromToken] = useState(tokens[0].symbol);
+  const [toToken, setToToken] = useState(tokens[1].symbol);
+  const [amount, setAmount] = useState('');
+  const [estimatedOutput, setEstimatedOutput] = useState('');
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
 
-  const handleSwap = useCallback(() => {
-    // In a real application, this would call a smart contract or API
-    console.log(`Swapping ${amount} ${fromToken} to ${toToken}`)
-  }, [fromToken, toToken, amount])
+  const handleSwap = useCallback(async () => {
+    if (!window.ethereum) {
+      alert('Please install MetaMask!');
+      return;
+    }
+
+    const provider = new ethers.BrowserProvider(window.ethereum);
+    const signer = await provider.getSigner();
+    const contract = new ethers.Contract(contractAddress, contractabi, signer);
+
+    const destinationChainSelector = 1002; // Example chain ID
+    const destinationTokenAddress = "0x13630b806086058EeAc26Af04c4528761e4DC389"; // Example token address
+    const recipient = await signer.getAddress();
+    const amountInWei = ethers.parseEther(amount);
+
+    setLoading(true);
+    setError('');
+
+    try {
+      // Specify the function you want to call
+      const swapFunction = contract.interface.getFunction('swap(uint256,bytes,bytes,uint256)');
+
+      const tx = await contract.swap(destinationChainSelector, destinationTokenAddress, recipient, amountInWei, {
+        gasLimit: 500000 // Adjust this as needed
+      });
+
+      console.log('Transaction sent:', tx);
+
+      const receipt = await tx.wait();
+      console.log('Transaction confirmed:', receipt);
+      alert('Swap successful!');
+    } catch (error) {
+      console.error('Error during swap:', error);
+      setError('Swap failed. Please try again.');
+    } finally {
+      setLoading(false);
+    }
+  }, [fromToken, toToken, amount]);
+
 
   const handleUserInput = useCallback((value: string) => {
-    setAmount(value)
-    // Mocking the api request to get the estimated output
-    setEstimatedOutput(value ? (parseFloat(value) * 0.98).toFixed(6) : '')
-  }, [])
+    setAmount(value);
+    setEstimatedOutput(value ? (parseFloat(value) * 0.98).toFixed(6) : '');
+  }, []);
 
   const handleReverse = useCallback(() => {
-    setFromToken(toToken)
-    setToToken(fromToken)
-    setAmount(estimatedOutput)
-    setEstimatedOutput(amount)
-  }, [fromToken, toToken, amount, estimatedOutput])
+    setFromToken(toToken);
+    setToToken(fromToken);
+    setAmount(estimatedOutput);
+    setEstimatedOutput(amount);
+  }, [fromToken, toToken, amount, estimatedOutput]);
 
   return (
     <Card className="mx-4 w-full max-w-md sm:mx-auto">
@@ -51,6 +91,7 @@ export default function TokenSwapForm() {
                 onChange={(e) => handleUserInput(e.target.value)}
                 className="flex-grow"
                 step="any"
+                disabled={loading}
               />
               <Select value={fromToken} onValueChange={setFromToken}>
                 <SelectTrigger className="w-[120px]">
@@ -69,7 +110,7 @@ export default function TokenSwapForm() {
 
           <div className="flex justify-center">
             <Tooltip content="Switch Token">
-              <Button size="icon" type='button' variant="ghost" onClick={handleReverse}>
+              <Button size="icon" type='button' variant="ghost" onClick={handleReverse} disabled={loading}>
                 <ArrowUpDown className="h-6 w-6" />
               </Button>
             </Tooltip>
@@ -102,8 +143,10 @@ export default function TokenSwapForm() {
             </div>
           </div>
 
-          <Button onClick={handleSwap} className="w-full">
-            Swap <ArrowRightIcon className="ml-2 h-4 w-4" />
+          {error && <p className="text-red-600">{error}</p>}
+
+          <Button onClick={handleSwap} className="w-full" disabled={loading}>
+            {loading ? 'Swapping...' : 'Swap'} <ArrowRightIcon className="ml-2 h-4 w-4" />
           </Button>
         </div>
       </CardContent>
